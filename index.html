@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YSL | Âm Thanh Phù Hoa</title>
     <style>
-        /* Style YSL: Black & Gold Luxury */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap');
 
         :root {
-            --bg-color: #050505;
+            --bg-color: #030303;
             --gold-primary: #D4AF37;
             --text-main: #FFFFFF;
             --text-sub: #A0A0A0;
-            --border-color: #333333;
+            --border-color: #222222;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,216 +20,278 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, transparent 50%);
+            background-image: radial-gradient(circle at 50% 50%, #111111 0%, #000000 100%);
             color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ================= INTRO SCREEN ================= */
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+            z-index: 9999;
+            transition: opacity 1s ease-in-out, visibility 1s;
         }
 
-        .container {
-            background: rgba(10, 10, 10, 0.6);
-            padding: 50px 40px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            backdrop-filter: blur(15px);
-        }
-
-        h1 {
+        .ysl-logo-intro {
             font-family: 'Playfair Display', serif;
-            font-size: 34px;
+            font-size: 60px;
             color: var(--gold-primary);
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
+            letter-spacing: 10px;
+            margin-bottom: 30px;
+            animation: fadeInOut 3s infinite alternate;
         }
 
-        p.subtitle {
-            color: var(--text-sub);
-            margin-bottom: 40px;
-            font-size: 13px;
-            letter-spacing: 2px;
-            font-weight: 300;
-            text-transform: uppercase;
-        }
-
-        /* Nút Ghi Âm Luxury */
-        .record-btn {
-            background-color: transparent;
-            color: var(--gold-primary);
-            border: 1px solid var(--gold-primary);
-            padding: 18px 45px;
-            font-size: 14px;
+        .enter-btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--text-sub);
+            padding: 15px 40px;
             font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            letter-spacing: 3px;
+            font-size: 12px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            border-radius: 50px;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.5s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .record-btn:hover {
-            background-color: var(--gold-primary);
-            color: var(--bg-color);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+        .enter-btn:hover {
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
 
-        .record-btn.recording {
-            background-color: var(--gold-primary);
-            color: var(--bg-color);
-            animation: goldPulse 1.5s infinite;
-            border-color: transparent;
-        }
-
-        @keyframes goldPulse {
-            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6); }
-            70% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-        }
-
-        #status {
-            margin-top: 25px;
-            font-size: 13px;
-            color: var(--text-sub);
-            font-style: italic;
-            min-height: 20px;
-            letter-spacing: 1px;
-        }
-
-        /* Vòng xoay Loading */
-        .loader {
-            border: 2px solid var(--border-color);
-            border-top: 2px solid var(--gold-primary);
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto 0;
+        /* ================= MAIN APP ================= */
+        #main-app {
             display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 1s ease-in;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Khu vực Kết Quả */
-        .results-container { margin-top: 40px; text-align: left; display: none; }
-        .results-title {
+        .header-title {
             font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            color: var(--text-sub);
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
+            font-size: 30px;
+            color: var(--gold-primary);
+            letter-spacing: 4px;
             text-transform: uppercase;
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        .subtitle {
+            color: var(--text-sub);
+            font-size: 12px;
             letter-spacing: 2px;
-            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 60px;
+        }
+
+        /* Vòng tròn ghi âm (Core UI) */
+        .record-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(20, 20, 20, 0.8);
+            border: 2px solid var(--gold-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .record-circle i {
+            font-size: 40px;
+            color: var(--gold-primary);
+            font-style: normal;
+        }
+
+        .record-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Hiệu ứng RGB khi đang nghe (ĐỘT PHÁ) */
+        .record-circle.listening {
+            border: none;
+            background: #000;
+            animation: rgbPulse 2s infinite, spin 4s linear infinite;
+        }
+
+        .record-circle.listening i {
+            animation: counterSpin 4s linear infinite;
+            color: #fff;
+        }
+
+        @keyframes rgbPulse {
+            0% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, inset 0 0 20px #ff0000; }
+            33% { box-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, inset 0 0 20px #00ff00; }
+            66% { box-shadow: 0 0 20px #0000ff, 0 0 40px #0000ff, inset 0 0 20px #0000ff; }
+            100% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, inset 0 0 20px #ff0000; }
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes counterSpin { 100% { transform: rotate(-360deg); } }
+
+        /* Dynamic Text Status (Giống Shazam) */
+        #dynamic-status {
+            font-size: 14px;
+            color: var(--gold-primary);
+            letter-spacing: 1px;
+            min-height: 20px;
+            font-weight: 300;
+            transition: opacity 0.3s;
+        }
+
+        /* ================= RESULTS SECTION ================= */
+        .results-container {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 500px;
+            display: none;
         }
 
         .song-card {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 25px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border-radius: 15px;
             border: 1px solid var(--border-color);
-            transition: border-color 0.4s;
             text-align: center;
-        }
-        .song-card:hover { border-color: var(--gold-primary); }
-
-        .song-info strong { 
-            display: block; 
-            font-size: 26px; 
-            font-family: 'Playfair Display', serif; 
-            color: var(--gold-primary); 
-            margin-bottom: 8px; 
-        }
-        .song-info span { 
-            font-size: 13px; 
-            color: var(--text-main); 
-            font-weight: 400; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.6s ease-out;
         }
 
-        /* Nút Liên Kết Đa Nền Tảng */
-        .platform-links { display: flex; gap: 10px; margin-top: 25px; justify-content: center; flex-wrap: wrap; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .song-card strong {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .song-card span {
+            font-size: 14px;
+            color: var(--text-main);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Nền tảng Buttons */
+        .platform-links { display: flex; gap: 8px; margin-top: 25px; justify-content: center; flex-wrap: wrap; }
         .platform-btn {
-            padding: 10px 18px;
-            border-radius: 50px;
+            padding: 8px 15px;
+            border-radius: 4px;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
             transition: all 0.3s ease;
-            border: 1px solid transparent;
         }
-        .platform-btn:hover { transform: translateY(-3px); }
+        .platform-btn:hover { transform: translateY(-2px); opacity: 0.8; }
         
         .btn-yt { background: #FF0000; color: white; }
-        .btn-ytm { background: #111111; color: white; border-color: #333; }
+        .btn-ytm { background: #111111; color: white; border: 1px solid #444; }
         .btn-spo { background: #1DB954; color: white; }
         .btn-apl { background: #FA243C; color: white; }
 
-        /* Chữ ký DEV INFO (YSL) */
         .dev-info {
-            margin-top: 50px;
+            margin-top: auto;
+            padding-top: 40px;
+            padding-bottom: 20px;
             text-align: center;
-            font-size: 11px;
-            color: #555;
+            font-size: 10px;
+            color: #444;
             letter-spacing: 3px;
             text-transform: uppercase;
         }
-        .dev-info span {
-            color: var(--gold-primary);
-            font-weight: 600;
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            letter-spacing: 5px;
-            display: block;
-            margin-top: 5px;
-        }
+        .dev-info span { color: var(--gold-primary); font-family: 'Playfair Display', serif; font-size: 16px; letter-spacing: 5px; }
 
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Giai Điệu Bí Ẩn</h1>
-        <p class="subtitle">Trải nghiệm tìm kiếm âm nhạc đẳng cấp</p>
-        
-        <button id="recordBtn" class="record-btn">Bắt Đầu Cảm Âm</button>
-        <div id="status">Chạm để đánh thức hệ thống</div>
-        <div id="loader" class="loader"></div>
+    <!-- MÀN HÌNH INTRO -->
+    <div id="intro-screen">
+        <div class="ysl-logo-intro">YSL</div>
+        <button class="enter-btn" onclick="enterApp()">Trải Nghiệm Ngay</button>
+    </div>
 
+    <!-- ỨNG DỤNG CHÍNH -->
+    <div id="main-app">
+        <h1 class="header-title">Giai Điệu Bí Ẩn</h1>
+        <p class="subtitle">Powered by YSL Intelligence</p>
+        
+        <!-- Nút ghi âm hình tròn lớn -->
+        <div class="record-circle" id="recordBtn">
+            <i id="recordIcon">🎙️</i>
+        </div>
+        
+        <!-- Trạng thái chữ chạy tự động -->
+        <div id="dynamic-status">Chạm vào biểu tượng để bắt đầu</div>
+
+        <!-- Kết quả -->
         <div id="resultsArea" class="results-container">
-            <div class="results-title">Kiệt Tác Được Tìm Thấy</div>
             <div id="songsList"></div>
+        </div>
+
+        <div class="dev-info">
+            Kiến tạo & Thiết kế bởi<br><span>YSL</span>
         </div>
     </div>
 
-    <div class="dev-info">
-        Sáng lập & Kiến tạo bởi<br><span>YSL</span>
-    </div>
-
     <script>
-        // TOKEN ĐƯỢC BẢO TRÌ BỞI AUDD.IO
+        // API KEY
         const API_TOKEN = 'f70ebeccd734a8ebb2f792ad5629cab7';
         
         let mediaRecorder;
         let audioChunks = [];
+        let textInterval;
+        
+        const introScreen = document.getElementById('intro-screen');
+        const mainApp = document.getElementById('main-app');
         const recordBtn = document.getElementById('recordBtn');
-        const statusDiv = document.getElementById('status');
+        const recordIcon = document.getElementById('recordIcon');
+        const statusText = document.getElementById('dynamic-status');
         const resultsArea = document.getElementById('resultsArea');
         const songsList = document.getElementById('songsList');
-        const loader = document.getElementById('loader');
+
+        // Mảng các câu trạng thái AI (Giống Shazam)
+        const aiPhrases = [
+            "Đang thu nhận dải âm thanh...",
+            "Đang lọc tạp âm môi trường...",
+            "Đang phân tích cấu trúc giai điệu...",
+            "Đang đối chiếu với kho dữ liệu toàn cầu...",
+            "Đang tìm kiếm sự trùng khớp..."
+        ];
+
+        // Hàm chuyển từ Intro sang Main (Để trình duyệt sẵn sàng cấp quyền Audio)
+        function enterApp() {
+            introScreen.style.opacity = '0';
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                mainApp.style.display = 'flex';
+                // Trigger animation fade in
+                setTimeout(() => mainApp.style.opacity = '1', 100);
+            }, 1000);
+        }
 
         recordBtn.addEventListener('click', async () => {
             if (mediaRecorder && mediaRecorder.state === "recording") {
@@ -238,7 +299,15 @@
                 setUIState('processing');
             } else {
                 try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    // Cấu hình tối ưu âm thanh: Tắt echoCancellation để lấy tiếng ngân nga thật nhất
+                    const stream = await navigator.mediaDevices.getUserMedia({ 
+                        audio: { 
+                            echoCancellation: false,
+                            autoGainControl: true,
+                            noiseSuppression: false 
+                        } 
+                    });
+                    
                     mediaRecorder = new MediaRecorder(stream);
                     audioChunks = [];
 
@@ -247,8 +316,7 @@
                     };
 
                     mediaRecorder.onstop = async () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                        // Fix Bug: Dọn rác stream, ngắt kết nối Micro triệt để để tắt đèn đỏ ở trình duyệt
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                         stream.getTracks().forEach(track => track.stop()); 
                         await fetchFromAPI(audioBlob);
                     };
@@ -256,36 +324,43 @@
                     mediaRecorder.start();
                     setUIState('recording');
                 } catch (err) {
-                    alert("Quyền truy cập Micro bị từ chối. Vui lòng cấp quyền trong cài đặt trình duyệt để tiếp tục.");
-                    console.error("Lỗi Micro: ", err);
+                    alert("YSL cần quyền sử dụng Micro để nhận diện âm thanh. Vui lòng kiểm tra lại cài đặt!");
                 }
             }
         });
 
+        // Hàm quản lý giao diện thông minh
         function setUIState(state) {
+            clearInterval(textInterval); // Reset vòng lặp chữ
+
             if (state === 'recording') {
-                recordBtn.classList.add('recording');
-                recordBtn.innerText = "DỪNG & PHÂN TÍCH";
-                statusDiv.innerText = "Đang lắng nghe... (Hãy hát khoảng 5 - 10 giây)";
+                recordBtn.classList.add('listening');
+                recordIcon.innerText = "🎧";
                 resultsArea.style.display = 'none';
-                loader.style.display = 'none';
+                
+                // Hiệu ứng chữ chạy thay đổi mỗi 2 giây
+                let index = 0;
+                statusText.innerText = aiPhrases[0];
+                textInterval = setInterval(() => {
+                    index = (index + 1) % aiPhrases.length;
+                    statusText.style.opacity = 0;
+                    setTimeout(() => {
+                        statusText.innerText = aiPhrases[index];
+                        statusText.style.opacity = 1;
+                    }, 300);
+                }, 2500);
+
             } else if (state === 'processing') {
-                recordBtn.classList.remove('recording');
-                recordBtn.innerText = "BẮT ĐẦU CẢM ÂM";
-                statusDiv.innerText = "Hệ thống AI đang đối chiếu dữ liệu âm thanh...";
-                loader.style.display = 'block';
-            } else if (state === 'done') {
-                statusDiv.innerText = "Phân tích hoàn tất.";
-                loader.style.display = 'none';
-                resultsArea.style.display = 'block';
-            } else if (state === 'error') {
-                recordBtn.classList.remove('recording');
-                recordBtn.innerText = "THỬ LẠI";
-                loader.style.display = 'none';
+                recordBtn.classList.remove('listening');
+                recordIcon.innerText = "⏳";
+                statusText.innerText = "Đang tổng hợp và giải mã âm thanh...";
+            } else if (state === 'done' || state === 'error') {
+                recordBtn.classList.remove('listening');
+                recordIcon.innerText = "🎙️";
             }
         }
 
-        // Tạo link chuyển hướng tự động sang các nền tảng Streaming
+        // Gen link sang các nền tảng khác
         function generateSearchLinks(title, artist) {
             const query = encodeURIComponent(`${title} ${artist}`);
             return `
@@ -298,6 +373,7 @@
             `;
         }
 
+        // Gọi API AudD
         async function fetchFromAPI(blob) {
             const formData = new FormData();
             formData.append('api_token', API_TOKEN);
@@ -314,24 +390,23 @@
 
                 if (data.status === "success" && data.result) {
                     const song = data.result;
-                    const card = document.createElement('div');
-                    card.className = 'song-card';
-                    card.innerHTML = `
-                        <div class="song-info">
+                    songsList.innerHTML = `
+                        <div class="song-card">
+                            <div style="font-size: 10px; color: #1DB954; margin-bottom: 10px; letter-spacing: 2px;">✔ ĐÃ TÌM THẤY MATCH</div>
                             <strong>${song.title}</strong>
                             <span>${song.artist}</span>
+                            ${generateSearchLinks(song.title, song.artist)}
                         </div>
-                        ${generateSearchLinks(song.title, song.artist)}
                     `;
-                    songsList.appendChild(card);
+                    resultsArea.style.display = 'block';
+                    statusText.innerText = "Hoàn tất tìm kiếm!";
                     setUIState('done');
                 } else {
-                    statusDiv.innerText = "Không thể nhận dạng. Vui lòng hát rõ lời hơn hoặc thử đoạn điệp khúc.";
+                    statusText.innerText = "Chưa tìm thấy dữ liệu. Hãy thử hát to và rõ hơn ở đoạn điệp khúc nhé.";
                     setUIState('error');
                 }
             } catch (error) {
-                console.error("Lỗi API:", error);
-                statusDiv.innerText = "Mất kết nối với máy chủ AI. Vui lòng kiểm tra lại mạng Internet.";
+                statusText.innerText = "Kết nối máy chủ YSL bị gián đoạn. Vui lòng thử lại.";
                 setUIState('error');
             }
         }
